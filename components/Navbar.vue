@@ -35,10 +35,10 @@ const links = [{
 
 const isOpen = ref(false)
 </script>
-
 <template>
     <div
-        class="agendaHeaderImg bg-gradient-to-r from-[#00012D] to-[#03025f] text-white font-semibold py-4 px-2 md:px-20 space-y-4 text-sm">
+        class="h-screen w-full bg-gradient-to-r from-[#00012D] to-[#03025f] bg-cover bg-center text-white font-semibold py-4 px-2 md:px-20 space-y-4 text-sm"
+        style="background-image: url('/images/agenda-header.png');">
         <div class="flex items-center justify-end space-x-4 text-xs">
             <div>
                 <NuxtLink to="/register" class="flex items-center md:space-x-2">
@@ -58,12 +58,12 @@ const isOpen = ref(false)
                 <img class="h-20 w-20" src="/public/images/IDWS-logo.jpeg" alt="idws logo">
             </div>
             <div class="hidden min-[1400px]:flex w-3/4 lg:justify-evenly lg:items-center">
-                <div v-for="link in links">
+                <div v-for="link in links" :key="link.label">
                     <NuxtLink :to="link.to" active-class="text-[#0058A0]">
                         {{ link.label }}
                     </NuxtLink>
                 </div>
-                <div class="parellelogram bg-[#0058A0]  py-2 px-10  flex items-center space-x-2 cursor-pointer">
+                <div class="parellelogram bg-[#0058A0] py-2 px-10 flex items-center space-x-2 cursor-pointer">
                     <UIcon name="ic:baseline-video-camera-front" class="w-6 h-5" />
                     <h1>LIVE STREAMING </h1>
                 </div>
@@ -83,13 +83,13 @@ const isOpen = ref(false)
                     </template>
 
                     <Placeholder class="h-full space-y-2">
-                        <div v-for="link in links">
+                        <div v-for="link in links" :key="link.label">
                             <NuxtLink :to="link.to" active-class="text-[#0058A0]">
                                 {{ link.label }}
                             </NuxtLink>
                         </div>
                         <!-- mobile view  -->
-                        <div class="parellelogram bg-[#0058A0]  py-2 px-6 flex w-fit cursor-pointer">
+                        <div class="parellelogram bg-[#0058A0] py-2 px-6 flex w-fit cursor-pointer">
                             <UIcon name="ic:baseline-video-camera-front" class="w-6 h-5" />
                             <h1>Live Streaming</h1>
                         </div>
@@ -100,15 +100,9 @@ const isOpen = ref(false)
     </div>
 </template>
 
+
 <style scoped>
 .parellelogram {
     clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%);
 }
-
-.agendaHeaderImg {
-    background-image: url('/images/agenda-header.png'); 
-    background-size: cover; 
-    background-position: center; 
-}
-
 </style>
