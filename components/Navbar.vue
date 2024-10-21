@@ -43,11 +43,13 @@ const isOpen = ref(false)
             <div>
                 <NuxtLink to="/register" class="flex items-center md:space-x-2">
                     <span>Register now</span>
+                    <UIcon name="heroicons:arrow-long-right-20-solid" class="w-5 h-5" />
                 </NuxtLink>
             </div>
             <div>
                 <NuxtLink to="/login" class="flex items-center md:space-x-2">
                     <span>Login</span>
+                    <UIcon name="material-symbols-light:lock-outline" class="w-5 h-5" />
                 </NuxtLink>
             </div>
         </div>
@@ -62,6 +64,7 @@ const isOpen = ref(false)
                     </NuxtLink>
                 </div>
                 <div class="parellelogram bg-[#0058A0]  py-2 px-10  flex items-center space-x-2 cursor-pointer">
+                    <UIcon name="ic:baseline-video-camera-front" class="w-6 h-5" />
                     <h1>LIVE STREAMING </h1>
                 </div>
             </div>
