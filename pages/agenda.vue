@@ -1,6 +1,3 @@
 <template>
-    
-    <h1>
-         This is agenda page.
-    </h1>
+<Navbar/>
 </template>
