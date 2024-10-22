@@ -37,7 +37,7 @@ const isOpen = ref(false)
 </script>
 <template>
     <div
-        class="h-screen w-full bg-gradient-to-r from-[#00012D] to-[#03025f] bg-cover bg-center text-white font-semibold py-4 px-2 md:px-20 space-y-4 text-sm"
+        class="bg-[center_top_-5rem] h-80 w-full bg-gradient-to-r from-[#00012D] to-[#03025f] bg-cover text-white font-semibold py-4 px-2 md:px-20 space-y-4 text-sm"
         style="background-image: url('/images/agenda-header.png');">
         <div class="flex items-center justify-end space-x-4 text-xs">
             <div>
