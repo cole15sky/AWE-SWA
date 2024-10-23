@@ -1,4 +1,4 @@
-   <template>
+<template>
     <div >
       <div>
         <navbar />
@@ -46,6 +46,15 @@
       }
       const json = await response.json();
       data.value = json;
+      console.log(data.value);
+      let allResponseInJSON = JSON.parse(JSON.stringify(json))
+    //   let allLabelsOfJSON = Object.keys(allResponseInJSON).filter(key => key === 'label');
+      let allLabelsOfJSON = allResponseInJSON.keys('label')
+      let allTypes = allResponseInJSON.map( obj => obj.type )
+      let uniqueArray = Array.from(new Set(allTypes));
+
+    //   debugger
+      console.log(`I am labels ${allLabelsOfJSON}`);
     } catch (err) {
       error.value = err.message;
     } finally {
@@ -64,3 +73,6 @@
     return date.toLocaleString();
   };
   </script>
+
+
+
