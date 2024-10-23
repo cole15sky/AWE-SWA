@@ -1,34 +1,35 @@
 <template>
     <div>
         <Navbar />
-        <div class="flex  justify-center min-h-50">
-
+        <div class="flex justify-center w-screen min-h-50 pt-20 pl-20">
             <!-- Sidebar displaying 4 unique items from uniqueArray -->
-            <div class="w-1/6 p-4 ">
+            
+            <div class="w-1/6 p-4">
 
-                <!--  Loading Unique elements from Array -->
-                <ul>
+                <!-- Loading Unique elements from Array -->
+                <ul class="space-y-1">
                     <li v-for="(item, index) in uniqueArray.slice(0, 4)" :key="index">
-                        <button @click="selectType(item)" class="w-full text-left text-xl p-2" :class="{
-                            'bg-gradient-to-r from-[#00012D] to-[#03025f] text-white': selectedType === item,
-                            'bg-sky-100 text-black': selectedType !== item
-                        }">
-                            {{ item }}
+                        <button @click="selectType(item)"
+                            class="relative w-full  text-xl p-2 flex justify-between items-center" :class="{
+                                'bg-gradient-to-r from-[#00012D] to-[#03025f] text-white': selectedType === item,
+                                'bg-sky-100 text-black': selectedType !== item
+                            }">
+                            <span>{{ item }}</span>
+                            <!-- Triangle (arrow) for the selected button -->
+                            <div v-if="selectedType === item"
+                                class="absolute right-[-15px] top-1/2 transform -translate-y-1/2 border-t-[10px] border-b-[10px] border-l-[15px] border-t-transparent border-b-transparent border-l-[#03025f]">
+                            </div>
                         </button>
                     </li>
                 </ul>
-
-
             </div>
 
             <div class="w-2/4 p-15">
-
                 <div v-if="loading" class="text-center text-gray-500">Loading data...</div>
                 <div v-if="error" class="text-center text-red-500">Error: {{ error }}</div>
-
-                <div >
+                <div>
                     <!-- Display items filtered by selectedType -->
-                    <div v-for="(item, index) in filteredData" :key="index" class="p-6 border rounded-xl  shadow">
+                    <div v-for="(item, index) in filteredData" :key="index" class="p-6 shadow">
                         <h3 class="text-[#00012D] font-bold">{{ item.title }}</h3>
                         <p>{{ item.description }}</p>
                     </div>
@@ -36,7 +37,6 @@
             </div>
         </div>
     </div>
-
 </template>
 
 <script setup>
@@ -51,6 +51,10 @@ const loading = ref(true);
 const selectedType = ref('panelDiscussions');
 
 
+// Define uniqueArray as reactive to store unique types
+const uniqueArray = ref([]);
+const uniqueArrayDate =ref([]);
+
 // Fetch data from API when component is mounted
 const getData = async () => {
     const url = 'https://swa-2024-dev.up.railway.app/api/agenda/web';
@@ -64,8 +68,11 @@ const getData = async () => {
 
         // Extract unique types from the data
         const allTypes = json.map(obj => obj.type);
-
         uniqueArray.value = Array.from(new Set(allTypes));
+       
+        //Extract unique date from data
+        const allStartDate = json.map(obj => obj.startDate)
+        uniqueArrayDate.value = Array.from(new Set(allStartDate));
         debugger
 
     } catch (err) {
@@ -85,8 +92,7 @@ const filteredData = computed(() => {
     return data.value ? data.value.filter(item => item.type === selectedType.value) : [];
 });
 
-// Define uniqueArray as reactive to store unique types
-const uniqueArray = ref([]);
+
 
 const selectType = (item) => {
     selectedType.value = item;  // Update the selected type
