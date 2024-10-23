@@ -48,7 +48,7 @@ definePageMeta({
 const data = ref(null);
 const error = ref(null);
 const loading = ref(true);
-const selectedType = ref('null');
+const selectedType = ref('panelDiscussions');
 
 
 // Fetch data from API when component is mounted
