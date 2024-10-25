@@ -42,12 +42,14 @@
                     <!-- Display filtered data with profile images -->
                     <div v-for="(item, index) in filteredData" :key="index" class="p-6 shadow-md">
                         <h3 class="text-[#00012D] font-bold">{{ item.title }}</h3>
-                        <p>{{ formatTime(item.startDate) }} - {{ formatTime(item.endDate) }}</p>
                         <p>{{ item.description }}</p>
+                        <div class="flex flex-row  items-center gap-2">
+                            <UIcon name="hugeicons:clock-01" class="w-4 h-4 space-y-4" />
+                            <p> {{ formatTime(item.startDate) }} - {{ formatTime(item.endDate) }}</p>
+                        </div>
 
                         <!-- Rendering speaker profiles -->
                         <div v-for="(speaker, idx) in item.agendaToSpeakers" :key="idx" class="flex items-center mt-2">
-
                             <img :src="getProfileImage(speaker.speakers.profileImage)" alt="Speaker Profile Image"
                                 class="w-16 h-16 rounded-full object-cover mr-4" />
                             <div>
@@ -109,11 +111,6 @@ const getData = async () => {
         loading.value = false;
     }
 };
-
-// Fetch data on component mount
-// onMounted(() => {
-//     getData();
-// });
 
 // Computed property to filter data by selectedType and selectedDateType
 const filteredData = computed(() => {
