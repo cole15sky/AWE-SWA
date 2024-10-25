@@ -2,9 +2,7 @@
     <div>
         <Navbar />
         <div class="flex justify-center w-screen min-h-50 pt-20 pl-20">
-            <!-- Sidebar displaying 4 unique items from uniqueArray -->
             <div class="w-1/6 p-4">
-                <!-- Loading Unique elements from Array -->
                 <ul class="space-y-1 mt-9">
                     <li v-for="(item, index) in uniqueArray.slice(0, 4)" :key="index">
                         <button @click="selectType(item)"
@@ -13,7 +11,7 @@
                                 'bg-sky-100 text-black': selectedType !== item
                             }">
                             <span>{{ item }}</span>
-                            <!-- Triangle (arrow) for the selected button -->
+
                             <div v-if="selectedType === item"
                                 class="absolute right-[-15px] top-1/2 transform -translate-y-1/2 border-t-[10px] border-b-[10px] border-l-[15px] border-t-transparent border-b-transparent border-l-[#03025f]">
                             </div>
@@ -22,7 +20,6 @@
                 </ul>
             </div>
 
-            <!-- Sidebar for unique start dates -->
             <div class="w-2/4 p-15">
                 <div v-if="loading" class="text-center text-gray-500">Loading data...</div>
                 <div v-if="error" class="text-center text-red-500">Error: {{ error }}</div>
@@ -42,10 +39,20 @@
                             </li>
                         </ul>
                     </div>
-
+                    <!-- Display filtered data with profile images -->
                     <div v-for="(item, index) in filteredData" :key="index" class="p-6 shadow-md">
                         <h3 class="text-[#00012D] font-bold">{{ item.title }}</h3>
                         <p>{{ item.description }}</p>
+
+                        <!-- Rendering speaker profiles -->
+                        <div v-for="(speaker, idx) in item.agendaToSpeakers" :key="idx" class="flex items-center mt-2">
+
+                            <img :src="getProfileImage(speaker.speakers.profileImage)" alt="Speaker Profile Image"
+                                class="w-16 h-16 rounded-full object-cover mr-4" />
+                            <div>
+                                <h4 class="font-semibold text-lg">{{ speaker.speakers.name }}</h4>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -57,12 +64,11 @@ definePageMeta({
     colorMode: 'light',
 })
 
-// Define reactive variables
 const data = ref(null);
 const error = ref(null);
 const loading = ref(true);
 const selectedType = ref('panelDiscussions');
-const selectedDateType = ref(null);  
+const selectedDateType = ref(null);
 
 const uniqueArray = ref([]);
 const uniqueArrayDate = ref([]);
@@ -84,7 +90,7 @@ const getData = async () => {
         const json = await response.json();
         data.value = json.map(item => ({
             ...item,
-            startDate: extractDate(item.startDate) // Extract only the date part
+            startDate: extractDate(item.startDate)
         }));
 
         // Extract unique types from the data
@@ -104,9 +110,9 @@ const getData = async () => {
 };
 
 // Fetch data on component mount
-onMounted(() => {
-    getData();
-});
+// onMounted(() => {
+//     getData();
+// });
 
 // Computed property to filter data by selectedType and selectedDateType
 const filteredData = computed(() => {
@@ -119,13 +125,18 @@ const filteredData = computed(() => {
         : [];
 });
 
-// Method to update the selected type
 const selectType = (item) => {
-    selectedType.value = item;  // Update the selected type
+    selectedType.value = item;
 };
 
-// Method to update the selected date
 const selectDateType = (date) => {
-    selectedDateType.value = date;  // Update the selected date
+    selectedDateType.value = date;
 };
+
+const getProfileImage = (profileImage) => {
+    return `https://pub-f9a129ce37b8446bafc8a9b4ca2c4bdb.r2.dev/${profileImage}`;
+};
+
+getData();
+
 </script>
