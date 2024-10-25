@@ -42,6 +42,7 @@
                     <!-- Display filtered data with profile images -->
                     <div v-for="(item, index) in filteredData" :key="index" class="p-6 shadow-md">
                         <h3 class="text-[#00012D] font-bold">{{ item.title }}</h3>
+                        <p>{{ formatTime(item.startDate) }} - {{ formatTime(item.endDate) }}</p>
                         <p>{{ item.description }}</p>
 
                         <!-- Rendering speaker profiles -->
@@ -73,11 +74,11 @@ const selectedDateType = ref(null);
 const uniqueArray = ref([]);
 const uniqueArrayDate = ref([]);
 
-// Utility function to extract date from a timestamp
-const extractDate = (timestamp) => {
+//  function to format timestamp to display only the time
+function formatTime(timestamp) {
     const date = new Date(timestamp);
-    return date.toISOString().split('T')[0];  // Extract only the 'YYYY-MM-DD' part
-};
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
 
 // Fetch data from API when component is mounted
 const getData = async () => {
@@ -136,6 +137,10 @@ const selectDateType = (date) => {
 const getProfileImage = (profileImage) => {
     return `https://pub-f9a129ce37b8446bafc8a9b4ca2c4bdb.r2.dev/${profileImage}`;
 };
+
+function extractDate(timestamp) {
+    return new Date(timestamp).toISOString().split('T')[0];
+}
 
 getData();
 
