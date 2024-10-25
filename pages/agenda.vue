@@ -49,11 +49,13 @@
                         </div>
 
                         <!-- Rendering speaker profiles -->
-                        <div v-for="(speaker, idx) in item.agendaToSpeakers" :key="idx" class="flex items-center mt-2">
-                            <img :src="getProfileImage(speaker.speakers.profileImage)" alt="Speaker Profile Image"
-                                class="w-16 h-16 rounded-full object-cover mr-4" />
-                            <div>
-                                <h4 class="font-semibold text-lg">{{ speaker.speakers.name }}</h4>
+                        <div class="flex flex-wrap mt-2">
+                            <div v-for="(speaker, idx) in item.agendaToSpeakers" :key="idx" class="flex items-center mr-4 mb-4">
+                                <img :src="getProfileImage(speaker.speakers.profileImage)" alt="Speaker Profile Image"
+                                    class="w-10 h-10 rounded-full object-cover mr-2" />
+                                <div>
+                                    <h4 class=" text-md">{{ speaker.speakers.name }}</h4>
+                                </div>
                             </div>
                         </div>
                     </div>
