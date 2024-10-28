@@ -34,10 +34,19 @@ const links = [{
 ]
 
 const isOpen = ref(false)
+const route = useRoute()
+
+const scheduleText = computed(() => {
+  switch (route.path) {
+    case '/agenda':
+      return 'Event Schedules'
+  }
+})
+
 </script>
+
 <template>
-    <div
-        class="bg-[center_top_-5rem] h-80 w-full bg-gradient-to-r from-[#00012D] to-[#03025f] bg-cover text-white font-semibold py-4 px-2 md:px-20 space-y-4 text-sm"
+    <div class=" relative bg-[center_top_-5rem] h-80 w-full bg-gradient-to-r from-[#00012D] to-[#03025f] bg-cover text-white font-semibold py-4 px-2 md:px-20 space-y-4 text-sm"
         style="background-image: url('/images/agenda-header.png');">
         <div class="flex items-center justify-end space-x-4 text-xs">
             <div>
@@ -97,6 +106,7 @@ const isOpen = ref(false)
                 </UCard>
             </USlideover>
         </div>
+        <p class="absolute bottom-7 left-30 font-semibold text-4xl">{{ scheduleText }}</p>
     </div>
 </template>
 
