@@ -1,7 +1,7 @@
 <template>
     <div>
         <Navbar />
-        <div class="flex justify-center w-screen min-h-50 pt-20 pr-18">
+        <div class="flex justify-center w-screen min-h-50 pr-18 py-20">
             <div class="w-1/7 p-5">
                 <ul class="space-y-1 ml-5 mt-9">
                     <li v-for="(item, index) in uniqueArray.slice(0, 4)" :key="index">
@@ -64,6 +64,9 @@
                 </div>
             </div>
         </div>
+        <div>
+            <Footer />
+        </div>
     </div>
 </template>
 <script setup>
@@ -75,7 +78,7 @@ const data = ref(null);
 const error = ref(null);
 const loading = ref(true);
 const selectedType = ref('panelDiscussions');
-const selectedDateType = ref('2024-10-30');
+const selectedDateType = ref('2024-10-28');
 
 const uniqueArray = ref([]);
 const uniqueArrayDate = ref([]);
