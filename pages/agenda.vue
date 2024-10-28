@@ -10,7 +10,7 @@
                                 'bg-gradient-to-r from-[#00012D] to-[#03025f] text-white': selectedType === item,
                                 'bg-sky-100 text-black': selectedType !== item
                             }">
-                            <span>{{ item }}</span>
+                            <span>{{ toTitleCase(item) }}</span>
 
                             <div v-if="selectedType === item"
                                 class="absolute right-[-15px] top-1/2 transform -translate-y-1/2 border-t-[10px] border-b-[10px] border-l-[15px] border-t-transparent border-b-transparent border-l-[#03025f]">
@@ -142,5 +142,13 @@ function extractDate(timestamp) {
 }
 
 getData();
+
+function toTitleCase(text) {
+    return text
+        .replace(/([a-z])([A-Z])/g, '$1 $2') 
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize each word
+        .join(' ');
+}
 
 </script>
