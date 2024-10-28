@@ -75,7 +75,7 @@ const data = ref(null);
 const error = ref(null);
 const loading = ref(true);
 const selectedType = ref('panelDiscussions');
-const selectedDateType = ref(null);
+const selectedDateType = ref('2024-10-30');
 
 const uniqueArray = ref([]);
 const uniqueArrayDate = ref([]);
