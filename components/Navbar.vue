@@ -44,11 +44,12 @@ const scheduleText = computed(() => {
 })
 
 </script>
-
 <template>
-    <div class=" relative bg-[center_top_-5rem] h-80 w-full bg-gradient-to-r from-[#00012D] to-[#03025f] bg-cover text-white font-semibold py-4 px-2 md:px-20 space-y-4 text-sm"
+    <div class="relative bg-[center_top_-5rem] h-80 w-full bg-gradient-to-r from-[#00012D] to-[#03025f] bg-cover text-white font-semibold py-4 px-2 md:px-20 space-y-4 text-sm"
         style="background-image: url('/images/agenda-header.png');">
-        <div class="flex items-center justify-end space-x-4 text-xs">
+        
+        <div class="absolute inset-0 bg-black opacity-60 z-10"></div> 
+        <div class="relative z-20 flex items-center justify-end space-x-4 text-xs">
             <div>
                 <NuxtLink to="/register" class="flex items-center md:space-x-2">
                     <span>Register now</span>
@@ -62,9 +63,9 @@ const scheduleText = computed(() => {
                 </NuxtLink>
             </div>
         </div>
-        <div class="flex justify-between">
+        <div class="relative z-20 flex justify-between">
             <div>
-                <img class="h-20 w-20" src="/public/images/IDWS-logo.jpeg" alt="idws logo">
+                <img class="h-20 w-20" src="/images/IDWS-logo.jpeg" alt="IDWS logo">
             </div>
             <div class="hidden min-[1400px]:flex w-3/4 lg:justify-evenly lg:items-center">
                 <div v-for="link in links" :key="link.label">
@@ -106,7 +107,7 @@ const scheduleText = computed(() => {
                 </UCard>
             </USlideover>
         </div>
-        <p class="absolute bottom-7 left-30 font-semibold text-4xl">{{ scheduleText }}</p>
+          <p class="absolute bottom-7 left-30 font-semibold text-4xl z-20">{{ scheduleText }}</p>
     </div>
 </template>
 
