@@ -6,13 +6,12 @@
                 <ul class="space-y-1 ml-5 mt-9">
                     <li v-for="(item, index) in uniqueArray.slice(0, 4)" :key="index">
                         <button @click="selectType(item)"
-                            class="relative w-[140px]  text-md p-3 b-2  whitespace-normal flex justify-between items-center"
+                            class="relative w-[140px] text-md p-3 b-2 whitespace-normal flex justify-between items-center"
                             :class="{
                                 'bg-gradient-to-r from-[#00012D] to-[#03025f] text-white': selectedType === item,
                                 'bg-gray-100 text-black': selectedType !== item
                             }">
-                            <span class="font-semibold ">{{ toTitleCase(item) }}</span>
-
+                            <span class="font-semibold">{{ toTitleCase(item) }}</span>
                             <div v-if="selectedType === item"
                                 class="absolute right-[-15px] top-1/2 transform -translate-y-1/2 border-t-[10px] border-b-[10px] border-l-[15px] border-t-transparent border-b-transparent border-l-[#03025f]">
                             </div>
@@ -24,39 +23,34 @@
                 <div v-if="loading" class="text-center text-gray-500">Loading data...</div>
                 <div v-if="error" class="text-center text-red-500">Error: {{ error }}</div>
                 <div>
-
-                    <!-- Display items filtered by selectedType and selectedDate -->
-                    <div class="flex justify-end space-x-4  ">
-                        <ul class="flex space-x-1 shadow-md ">
+                    <div class="flex justify-end space-x-4">
+                        <ul class="flex space-x-1 shadow-md">
                             <li v-for="(date, index) in uniqueArrayDate.slice(0, 4)" :key="index">
                                 <button @click="selectDateType(date)"
-                                    class="relative w-full text-xl p-3  justify-between " :class="{
+                                    class="relative w-full text-xl p-3 justify-between" :class="{
                                         'bg-gradient-to-r from-[#00012D] to-[#03025f] text-white': selectedDateType === date,
-                                        ' shadow-lg text-black': selectedDateType !== date
+                                        'shadow-lg text-black': selectedDateType !== date
                                     }">
                                     <span class="text-sm font-semibold p-4">{{ formatDate(date) }}</span>
                                 </button>
                             </li>
                         </ul>
                     </div>
-                    <!-- Display filtered data with profile images -->
-                    <div v-for="(item, index) in filteredData" :key="index" class="p-6 shadow-sm ">
+                    <div v-for="(item, index) in filteredData" :key="index" class="p-6 shadow-sm">
                         <h3 class="text-[#00012D] font-bold">{{ item.title }}</h3>
-                        <p class=" text-gray-400">{{ item.description }}</p>
-                        <div class="flex flex-row  items-center gap-2">
+                        <p class="text-gray-400">{{ item.description }}</p>
+                        <div class="flex flex-row items-center gap-2">
                             <UIcon name="hugeicons:clock-01" class="w-3 h-3 space-y-4" />
-                            <p class="text-sky-300 text-xs "> {{ formatTime(item.startDate) }} - {{
+                            <p class="text-sky-300 text-xs">{{ formatTime(item.startDate) }} - {{
                                 formatTime(item.endDate) }}</p>
                         </div>
-
-                        <!-- Rendering speaker profiles -->
                         <div class="flex flex-wrap mt-2">
                             <div v-for="(speaker, idx) in item.agendaToSpeakers" :key="idx"
                                 class="flex items-center mr-4 mb-4">
                                 <img :src="getProfileImage(speaker.speakers.profileImage)" alt="Speaker Profile Image"
                                     class="w-10 h-10 rounded-full object-cover mr-2" />
                                 <div>
-                                    <h4 class=" text-md">{{ speaker.speakers.name }}</h4>
+                                    <h4 class="text-md">{{ speaker.speakers.name }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -69,7 +63,9 @@
         </div>
     </div>
 </template>
+
 <script setup>
+
 definePageMeta({
     colorMode: 'light',
 })
@@ -77,13 +73,16 @@ definePageMeta({
 const data = ref(null);
 const error = ref(null);
 const loading = ref(true);
-const selectedType = ref('panelDiscussions');
-const selectedDateType = ref('2024-10-28');
+const router = useRouter();
+const route = useRoute();
+
+const selectedType = ref(route.query.type || 'panelDiscussions');
+const selectedDateType = ref(route.query.date || '2024-10-28');
 
 const uniqueArray = ref([]);
 const uniqueArrayDate = ref([]);
 
-//  function to format timestamp to display only the time
+// function to format timestamp to display only the time
 function formatTime(timestamp) {
     const date = new Date(timestamp);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -95,7 +94,6 @@ function formatDate(dateString) {
     return date.toLocaleDateString('en-US', options);
 }
 
-// Fetch data from API when component is mounted
 const getData = async () => {
     const url = 'https://swa-2024-dev.up.railway.app/api/agenda/web';
     try {
@@ -116,8 +114,6 @@ const getData = async () => {
         // Extract unique start dates from the data
         const allStartDates = json.map(obj => extractDate(obj.startDate));
         uniqueArrayDate.value = Array.from(new Set(allStartDates));
-
-
     } catch (err) {
         error.value = err.message;
     } finally {
@@ -138,10 +134,15 @@ const filteredData = computed(() => {
 
 const selectType = (item) => {
     selectedType.value = item;
+
+    router.push({ query: { ...route.query, type: item } });
 };
 
 const selectDateType = (date) => {
     selectedDateType.value = date;
+
+
+    router.push({ query: { ...route.query, date: date } });
 };
 
 const getProfileImage = (profileImage) => {
@@ -158,8 +159,16 @@ function toTitleCase(text) {
     return text
         .replace(/([a-z])([A-Z])/g, '$1 $2')
         .split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize each word
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
         .join(' ');
 }
 
+onMounted(() => {
+    if (route.query.type) {
+        selectedType.value = route.query.type;
+    }
+    if (route.query.date) {
+        selectedDateType.value = route.query.date;
+    }
+});
 </script>
