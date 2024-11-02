@@ -2,7 +2,7 @@
     <div>
         <Navbar />
         <div class="w-full  flex flex-col space-y-4">
-            <div class="flex flex-col  md:flex-row justify-center md:pr-18 py-8 md:py-18">
+            <div class="flex flex-col  md:flex-row justify-center md:pr-18 py-8 md:py-18 md:mt-10">
                 <div class=" hidden lg:block w-fit md:w-1/7 lg:w-1/7 p-3 md:p-5">
                     <ul class="space-y-1 ml-3 md:ml-5 mt-5">
                         <li v-for="(item, index) in uniqueArray.slice(0, 4)" :key="index" class="flex">
@@ -25,11 +25,10 @@
                     <div v-if="loading" class="text-center text-gray-500">Loading data...</div>
                     <div v-if="error" class="text-center text-red-500">Error: {{ error }}</div>
 
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center w-full space-x-4">
-
-                        <!-- Dropdown for Mobile Screens -->
-                        <div class="block md:hidden w-fit p-3 md:order-1">
-                            <select class="w-full p-2 border border-gray-300 rounded-md" v-model="selectedType"
+                    <div class="flex flex-col md:flex-row items-start md:items-center w-full space-x-4">
+                        <!-- Dropdown for Medium Screens and Below -->
+                        <div class="w-full  md:w-fit p-3  md:order-1 lg:hidden">
+                            <select class="w-fit p-2 border border-gray-300 rounded-md" v-model="selectedType"
                                 @change="selectType(selectedType)">
                                 <option disabled selected>Discussion Panel</option>
                                 <option v-for="(item, index) in uniqueArray.slice(0, 4)" :key="index" :value="item">
@@ -37,9 +36,7 @@
                                 </option>
                             </select>
                         </div>
-
-
-                        <ul class="flex order-2 space-x-1 w-full md:justify-end md:w-full sm:justify-end">
+                        <ul class="flex order-2 justify-center md:justify-end  md:w-full space-x-1 md:space-x-1">
                             <li v-for="(date, index) in uniqueArrayDate.slice(0, 4)" :key="index">
                                 <button @click="selectDateType(date)" class="relative w-fit text-xl p-3 justify-between"
                                     :class="{
@@ -52,7 +49,6 @@
                         </ul>
                     </div>
 
-
                     <!-- Content Display -->
                     <div v-for="(item, index) in filteredData" :key="index" class="p-6  shadow-sm">
                         <h3 class="text-[#00012D] font-bold">{{ item.title }}</h3>
@@ -61,7 +57,7 @@
                             <UIcon name="hugeicons:clock-01" class="w-3 h-3" />
                             <p class="text-sky-300 text-xs">{{ formatTime(item.startDate) }} - {{
                                 formatTime(item.endDate)
-                                }}</p>
+                            }}</p>
                         </div>
                         <div class="flex flex-wrap mt-2">
                             <div v-for="(speaker, idx) in item.agendaToSpeakers" :key="idx"
