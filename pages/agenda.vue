@@ -3,11 +3,11 @@
         <Navbar />
         <div class="w-full flex flex-col space-y-4">
             <div class="flex md:pr-18 md:flex-row justify-center py-8 md:mt-10">
-                <div class="hidden lg:block w-fit md:w-1/7 lg:w-1/7 p-3 md:p-5">
-                    <ul class="space-y-1 ml-3 md:ml-5 mt-5">
+                <div class="hidden md:mt-12 lg:block w-fit md:ml-10  md:w-1/7 lg:w-1/7">
+                    <ul class="space-y-1 md:w-fit md:ml-5 mt-12">
                         <li v-for="(item, index) in uniqueArray.slice(0, 4)" :key="index" class="flex">
                             <button @click="selectType(item)"
-                                class="relative w-full flex-1 text-sm md:text-md p-2 md:p-3 whitespace-normal flex justify-between items-center"
+                                class="relative w-full md:h-[60px]  flex-1 text-sm md:text-md p-2 md:p-3 whitespace-normal flex justify-between items-center"
                                 :class="{
                                     'bg-gradient-to-r from-[#00012D] to-[#03025f] text-white': selectedType === item,
                                     'bg-gray-100 text-black': selectedType !== item
@@ -20,25 +20,25 @@
                         </li>
                     </ul>
                 </div>
-
-                <div class="px-8 w-fit shadow-xl lg:w-3/5 lg:mx-5 ">
+                <div class="px-8 w-fit lg:w-3/5  ">
                     <div v-if="loading" class="text-center text-gray-500">Loading data...</div>
                     <div v-if="error" class="text-center text-red-500">Error: {{ error }}</div>
 
+
                     <div class="flex flex-col md:flex-row items-start md:items-center w-full space-x-4">
-                        <!-- Dropdown for Medium Screens and Below -->
+
                         <div class="w-full md:w-fit p-3 md:order-1 lg:hidden">
                             <select class="w-fit p-2 border border-gray-300 rounded-md" v-model="selectedType"
                                 @change="selectType(selectedType)">
-                                <option disabled selected>Discussion Panel</option>
                                 <option v-for="(item, index) in uniqueArray.slice(0, 4)" :key="index" :value="item">
                                     {{ toTitleCase(item) }}
                                 </option>
                             </select>
                         </div>
-                        <ul class="flex py-3 order-2 justify-center md:justify-end md:w-full space-x-1 md:space-x-1">
+                        <ul class=" flex py-3 sm:justify-end order-2 md:justify-end md:w-full space-x-1 ">
                             <li v-for="(date, index) in uniqueArrayDate.slice(0, 4)" :key="index">
-                                <button @click="selectDateType(date)" class="relative w-fit text-xl p-3 justify-between"
+                                <button @click="selectDateType(date)"
+                                    class="relative shadow-2xl md:w-[120px] h-[60px] text-xl p-2  justify-between"
                                     :class="{
                                         'bg-gradient-to-r from-[#00012D] to-[#03025f] text-white': selectedDateType === date,
                                         'shadow-lg text-black': selectedDateType !== date
@@ -49,16 +49,15 @@
                         </ul>
                     </div>
 
-                    <!-- Content Display -->
-                    <div class="px-10 md:px-6 shadow-lg">
-                        <div v-for="(item, index) in filteredData" :key="index">
+                    <div class="px-10 md:px-6 shadow-2xl">
+                        <div class="p-5 shadow-sm " v-for="(item, index) in filteredData" :key="index">
                             <h3 class="text-[#00012D] font-bold">{{ item.title }}</h3>
                             <p class="text-gray-400">{{ item.description }}</p>
                             <div class="flex items-center gap-2">
                                 <UIcon name="hugeicons:clock-01" class="w-3 h-3" />
                                 <p class="text-sky-300 text-xs">{{ formatTime(item.startDate) }} - {{
                                     formatTime(item.endDate)
-                                    }}</p>
+                                }}</p>
                             </div>
                             <div class="flex flex-wrap mt-2">
                                 <div v-for="(speaker, idx) in item.agendaToSpeakers" :key="idx"
@@ -94,13 +93,12 @@ const loading = ref(true);
 const router = useRouter();
 const route = useRoute();
 
-const selectedType = ref(route.query.type || 'panelDiscussions');
-const selectedDateType = ref(route.query.date || '2024-10-28');
+const selectedType = ref(route.query.type || 'general');
+const selectedDateType = ref(route.query.date || '2024-11-25');
 
 const uniqueArray = ref([]);
 const uniqueArrayDate = ref([]);
 
-// function to format timestamp to display only the time
 function formatTime(timestamp) {
     const date = new Date(timestamp);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -125,11 +123,9 @@ const getData = async () => {
             startDate: extractDate(item.startDate)
         }));
 
-        // Extract unique types from the data
         const allTypes = json.map(obj => obj.type);
         uniqueArray.value = Array.from(new Set(allTypes));
 
-        // Extract unique start dates from the data
         const allStartDates = json.map(obj => extractDate(obj.startDate));
         uniqueArrayDate.value = Array.from(new Set(allStartDates));
     } catch (err) {
@@ -139,7 +135,6 @@ const getData = async () => {
     }
 };
 
-// Computed property to filter data by selectedType and selectedDateType
 const filteredData = computed(() => {
     return data.value
         ? data.value.filter(
