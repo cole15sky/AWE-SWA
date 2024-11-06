@@ -65,7 +65,7 @@ const scheduleText = computed(() => {
         </div>
         <div class="relative z-20 flex justify-between">
             <div>
-                <img class="h-20 w-20" src="/images/IDWS-logo.jpeg" alt="IDWS logo">
+                <img class=" ml-0 h-30 w-60" src="/images/logo.png" alt="IDWS logo">
             </div>
             <div class="hidden min-[1400px]:flex w-3/4 lg:justify-evenly lg:items-center">
                 <div v-for="link in links" :key="link.label">

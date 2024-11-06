@@ -73,7 +73,7 @@
     <div class="max-[600px]: text-sm bg-gradient-to-r from-[#00012D] to-[#03025f] text-white font-semibold py-20 px-20 space-y-40 min-[320]">
         <div class="md:flex flex-wrap md:justify-between space-y-10 md:space-y-0 gap-10">
             <div>
-                <img class="h-20 w-20" src="/public/images/IDWS-logo.jpeg" alt="idws logo">
+                <img class=" ml-0 h-30 w-60" src="/images/logo.png" alt="IDWS logo">
             </div>
 
             <div class="flex-wrap md:flex md:justify-between w-3/5 gap-10">
