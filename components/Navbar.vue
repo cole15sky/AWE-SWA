@@ -37,18 +37,19 @@ const isOpen = ref(false)
 const route = useRoute()
 
 const scheduleText = computed(() => {
-  switch (route.path) {
-    case '/agenda':
-      return 'Event Schedules'
-  }
+    switch (route.path) {
+        case '/agenda':
+            return 'Event Schedules'
+    }
 })
 
 </script>
 <template>
-    <div class="relative bg-[center_top_-5rem] h-80 w-full bg-gradient-to-r from-[#00012D] to-[#03025f] bg-cover text-white font-semibold py-4 px-2 md:px-20 space-y-4 text-sm"
+    <div class="relative bg-[center_top_-4rem] h-80 w-full bg-gradient-to-r from-[#00012D] to-[#03025f] bg-cover text-white font-semibold py-4 px-2 md:px-20 space-y-4 text-sm"
         style="background-image: url('/images/agenda-header.png');">
-        
-        <div class="absolute inset-0 bg-black opacity-60 z-10"></div> 
+        <div class="absolute inset-0 bg-black opacity-60 z-10"></div>
+        <img src="/images/logo.png" alt="IDWS logo"
+            class="absolute top-5 left-5 z-20 h-16 sm:h-20 md:h-24 lg:h-30 xl:h-30" />
         <div class="relative z-20 flex items-center justify-end space-x-4 text-xs">
             <div>
                 <NuxtLink to="/register" class="flex items-center md:space-x-2">
@@ -63,10 +64,7 @@ const scheduleText = computed(() => {
                 </NuxtLink>
             </div>
         </div>
-        <div class="relative z-20 flex justify-between">
-            <div>
-                <img class=" ml-0 h-30 w-60" src="/images/logo.png" alt="IDWS logo">
-            </div>
+        <div class="relative z-20 flex justify-end">
             <div class="hidden min-[1400px]:flex w-3/4 lg:justify-evenly lg:items-center">
                 <div v-for="link in links" :key="link.label">
                     <NuxtLink :to="link.to" active-class="text-[#0058A0]">
@@ -74,7 +72,7 @@ const scheduleText = computed(() => {
                     </NuxtLink>
                 </div>
                 <div class="parellelogram bg-[#0058A0] py-2 px-10 flex items-center space-x-2 cursor-pointer">
-                    <UIcon name="ic:baseline-video-camera-front" class="w-6 h-5" />
+                    <UIcon name="ic:baseline-video-camera-front" class="w-5 h-4" />
                     <h1>LIVE STREAMING </h1>
                 </div>
             </div>
@@ -107,7 +105,7 @@ const scheduleText = computed(() => {
                 </UCard>
             </USlideover>
         </div>
-          <p class="hidden md:block md:absolute bottom-7 left-30 font-semibold text-4xl z-20">{{ scheduleText }}</p>
+        <p class="hidden md:block md:absolute bottom-7 left-30 font-semibold text-4xl z-20">{{ scheduleText }}</p>
     </div>
 </template>
 
