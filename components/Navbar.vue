@@ -98,7 +98,7 @@ const scheduleText = computed(() => {
                                 {{ link.label }}
                             </NuxtLink>
                         </div>
-                        <!-- mobile view  -->
+
                         <div class="parellelogram bg-[#0058A0] py-2 px-6 flex w-fit cursor-pointer">
                             <UIcon name="ic:baseline-video-camera-front" class="w-6 h-5" />
                             <h1>Live Streaming</h1>
@@ -107,7 +107,7 @@ const scheduleText = computed(() => {
                 </UCard>
             </USlideover>
         </div>
-          <p class="absolute bottom-7 left-30 font-semibold text-4xl z-20">{{ scheduleText }}</p>
+          <p class="hidden md:block md:absolute bottom-7 left-30 font-semibold text-4xl z-20">{{ scheduleText }}</p>
     </div>
 </template>
 
