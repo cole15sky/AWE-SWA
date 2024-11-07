@@ -3,11 +3,11 @@
         <Navbar />
         <div class="w-full flex flex-col space-y-4">
             <div class="flex md:pr-18 md:flex-row justify-center py-8 md:mt-10">
-                <div class="hidden md:mt-10 lg:block w-fit  md:w-1/7 lg:w-1/7">
-                    <ul class="space-y-1 md:w-fit md: mt-10">
+                <div class="hidden md:mt-10 lg:block w-fit md:w-1/7 lg:w-1/7">
+                    <ul class="space-y-1 md:w-fit md:mt-10">
                         <li v-for="(item, index) in uniqueArray.slice(0, 4)" :key="index" class="flex">
                             <button @click="selectType(item)"
-                                class="relative  md:w-[140px] md:h-[50px]  flex-1 text-sm md:text-md p-2 md:p- whitespace-normal flex justify-center items-center"
+                                class="relative md:w-[140px] md:h-[50px] flex-1 text-sm md:text-md p-2 whitespace-normal flex justify-center items-center"
                                 :class="{
                                     'bg-gradient-to-r from-[#00012D] to-[#03025f] text-white': selectedType === item,
                                     'bg-gray-100 text-black': selectedType !== item
@@ -20,13 +20,11 @@
                         </li>
                     </ul>
                 </div>
-                <div class="px-8 w-fit lg:w-3/5  ">
-                    <div v-if="loading" class="text-center text-gray-500">Loading data...</div>
-                    <div v-if="error" class="text-center text-red-500">Error: {{ error }}</div>
-
+                <div class="px-8 w-fit lg:w-3/5">
+                    <div v-if="pending" class="text-center text-gray-500">Loading data...</div>
+                    <div v-if="error" class="text-center text-red-500">Error: {{ error.message }}</div>
 
                     <div class="flex flex-col md:flex-row items-start md:items-center w-full space-x-4">
-
                         <div class="w-full md:w-fit p-3 md:order-1 lg:hidden">
                             <select class="w-fit p-2 border border-gray-300 rounded-md" v-model="selectedType"
                                 @change="selectType(selectedType)">
@@ -52,7 +50,7 @@
                     </div>
 
                     <div class="px-10 md:px-3" style="box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.25);">
-                        <div class="p-3 shadow-sm " v-for="(item, index) in filteredData" :key="index">
+                        <div class="p-3 shadow-sm" v-for="(item, index) in filteredData" :key="index">
                             <h3 class="text-[#00012D] font-bold">{{ item.title }}</h3>
                             <p class="text-gray-400">{{ item.description }}</p>
                             <div class="flex items-center gap-2">
@@ -82,60 +80,25 @@
     </div>
 </template>
 
-
-
 <script setup>
 definePageMeta({
     colorMode: 'light',
 })
 
-const data = ref(null);
-const error = ref(null);
-const loading = ref(true);
-const router = useRouter();
-const route = useRoute();
-
-const selectedType = ref(route.query.type || 'general');
-const selectedDateType = ref(route.query.date || '2024-11-25');
-
-const uniqueArray = ref([]);
-const uniqueArrayDate = ref([]);
-
-function formatTime(timestamp) {
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-}
-
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    const options = { month: 'short', day: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
-}
-
-const getData = async () => {
-    const url = 'https://swa-2024-dev.up.railway.app/api/agenda/web';
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-        }
-        const json = await response.json();
-        data.value = json.map(item => ({
+const { data,pending,error } = useFetch('https://swa-2024-dev.up.railway.app/api/agenda/web', {
+    transform: (json) => {
+        return json.map(item => ({
             ...item,
             startDate: extractDate(item.startDate)
         }));
-
-        const allTypes = json.map(obj => obj.type);
-        uniqueArray.value = Array.from(new Set(allTypes));
-
-        const allStartDates = json.map(obj => extractDate(obj.startDate));
-        uniqueArrayDate.value = Array.from(new Set(allStartDates));
-    } catch (err) {
-        error.value = err.message;
-    } finally {
-        loading.value = false;
     }
-};
+});
+
+const uniqueArray = computed(() => Array.from(new Set(data.value?.map(obj => obj.type) || [])));
+const uniqueArrayDate = computed(() => Array.from(new Set(data.value?.map(obj => extractDate(obj.startDate)) || [])));
+
+const selectedType = ref(useRoute().query.type || 'general');
+const selectedDateType = ref(useRoute().query.date || '2024-11-25');
 
 const filteredData = computed(() => {
     return data.value
@@ -149,26 +112,32 @@ const filteredData = computed(() => {
 
 const selectType = (item) => {
     selectedType.value = item;
-
-    router.push({ query: { ...route.query, type: item } });
+    useRouter().push({ query: { ...useRoute().query, type: item } });
 };
 
 const selectDateType = (date) => {
     selectedDateType.value = date;
-
-
-    router.push({ query: { ...route.query, date: date } });
+    useRouter().push({ query: { ...useRoute().query, date: date } });
 };
 
 const getProfileImage = (profileImage) => {
     return `https://pub-f9a129ce37b8446bafc8a9b4ca2c4bdb.r2.dev/${profileImage}`;
 };
 
+function formatTime(timestamp) {
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { month: 'short', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+}
+
 function extractDate(timestamp) {
     return new Date(timestamp).toISOString().split('T')[0];
 }
-
-getData();
 
 function toTitleCase(text) {
     return text
@@ -177,23 +146,4 @@ function toTitleCase(text) {
         .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
         .join(' ');
 }
-
-onMounted(() => {
-    if (route.query.type) {
-        selectedType.value = route.query.type;
-    }
-    if (route.query.date) {
-        selectedDateType.value = route.query.date;
-    }
-});
 </script>
-
-
-
-<style>
-.BorderShadow{
-    
-
-}
-
-</style>
