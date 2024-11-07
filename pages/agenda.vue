@@ -81,9 +81,6 @@
 </template>
 
 <script setup>
-definePageMeta({
-    colorMode: 'light',
-})
 
 const { data,pending,error } = useFetch('https://swa-2024-dev.up.railway.app/api/agenda/web', {
     transform: (json) => {
