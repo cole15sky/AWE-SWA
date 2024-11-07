@@ -79,23 +79,33 @@
         </div>
     </div>
 </template>
+<script setup lang="ts">
 
-<script setup>
-
-const { data,pending,error } = useFetch('https://swa-2024-dev.up.railway.app/api/agenda/web', {
-    transform: (json) => {
+interface AgendaItem {
+    id: number;
+    type: string;
+    startDate: string;
+    [key: string]: any; 
+}
+const { data, error } = useFetch<AgendaItem[]>('https://swa-2024-dev.up.railway.app/api/agenda/web', {
+    transform: (json: AgendaItem[]) => {
         return json.map(item => ({
             ...item,
-            startDate: extractDate(item.startDate)
+            startDate: extractDate(item.startDate) // Convert startDate to string
         }));
     }
 });
 
-const uniqueArray = computed(() => Array.from(new Set(data.value?.map(obj => obj.type) || [])));
-const uniqueArrayDate = computed(() => Array.from(new Set(data.value?.map(obj => extractDate(obj.startDate)) || [])));
+const uniqueArray = computed(() =>
+    Array.from(new Set(data.value?.map(obj => obj.type) || []))
+);
 
-const selectedType = ref(useRoute().query.type || 'general');
-const selectedDateType = ref(useRoute().query.date || '2024-11-25');
+const uniqueArrayDate = computed(() =>
+    Array.from(new Set(data.value?.map(obj => extractDate(obj.startDate)) || []))
+);
+
+const selectedType = ref<string>(useRoute().query.type as string || 'general');
+const selectedDateType = ref<string>(useRoute().query.date as string || '2024-11-25');
 
 const filteredData = computed(() => {
     return data.value
@@ -107,36 +117,36 @@ const filteredData = computed(() => {
         : [];
 });
 
-const selectType = (item) => {
+const selectType = (item: string) => {
     selectedType.value = item;
     useRouter().push({ query: { ...useRoute().query, type: item } });
 };
 
-const selectDateType = (date) => {
+const selectDateType = (date: string) => {
     selectedDateType.value = date;
     useRouter().push({ query: { ...useRoute().query, date: date } });
 };
 
-const getProfileImage = (profileImage) => {
+const getProfileImage = (profileImage: string) => {
     return `https://pub-f9a129ce37b8446bafc8a9b4ca2c4bdb.r2.dev/${profileImage}`;
 };
 
-function formatTime(timestamp) {
+function formatTime(timestamp: number | string): string {
     const date = new Date(timestamp);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
-function formatDate(dateString) {
+function formatDate(dateString: string): string {
     const date = new Date(dateString);
     const options = { month: 'short', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
 }
 
-function extractDate(timestamp) {
+function extractDate(timestamp: number | string): string {
     return new Date(timestamp).toISOString().split('T')[0];
 }
 
-function toTitleCase(text) {
+function toTitleCase(text: string): string {
     return text
         .replace(/([a-z])([A-Z])/g, '$1 $2')
         .split(' ')
