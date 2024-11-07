@@ -3,11 +3,11 @@
         <Navbar />
         <div class="w-full flex flex-col space-y-4">
             <div class="flex md:pr-18 md:flex-row justify-center py-8 md:mt-10">
-                <div class="hidden md:mt-12 lg:block w-fit md:ml-10  md:w-1/7 lg:w-1/7">
-                    <ul class="space-y-1 md:w-fit md:ml-5 mt-12">
+                <div class="hidden md:mt-10 lg:block w-fit  md:w-1/7 lg:w-1/7">
+                    <ul class="space-y-1 md:w-fit md: mt-10">
                         <li v-for="(item, index) in uniqueArray.slice(0, 4)" :key="index" class="flex">
                             <button @click="selectType(item)"
-                                class="relative w-full md:h-[60px]  flex-1 text-sm md:text-md p-2 md:p-3 whitespace-normal flex justify-between items-center"
+                                class="relative  md:w-[140px] md:h-[50px]  flex-1 text-sm md:text-md p-2 md:p- whitespace-normal flex justify-center items-center"
                                 :class="{
                                     'bg-gradient-to-r from-[#00012D] to-[#03025f] text-white': selectedType === item,
                                     'bg-gray-100 text-black': selectedType !== item
@@ -35,22 +35,24 @@
                                 </option>
                             </select>
                         </div>
-                        <ul class=" flex py-3 sm:justify-end order-2 md:justify-end md:w-full space-x-1 ">
-                            <li v-for="(date, index) in uniqueArrayDate.slice(0, 4)" :key="index">
-                                <button @click="selectDateType(date)"
-                                    class="relative shadow-2xl md:w-[120px] h-[60px] text-xl p-2  justify-between"
-                                    :class="{
-                                        'bg-gradient-to-r from-[#00012D] to-[#03025f] text-white': selectedDateType === date,
-                                        'shadow-lg text-black': selectedDateType !== date
-                                    }">
-                                    <span class="text-sm font-semibold p-4">{{ formatDate(date) }}</span>
-                                </button>
-                            </li>
-                        </ul>
+                        <div class="flex py-1 sm:justify-end order-2 md:justify-end md:w-full space-x-1">
+                            <div class="flex">
+                                <div v-for="(date, index) in uniqueArrayDate.slice(0, 4)" :key="index">
+                                    <button @click="selectDateType(date)"
+                                        class="relative md:w-[140px] h-[60px] text-xl p-2 justify-between"
+                                        :class="{
+                                            'bg-gradient-to-r from-[#00012D] to-[#03025f] text-white': selectedDateType === date,
+                                            'shadow-lg text-black': selectedDateType !== date
+                                        }">
+                                        <span class="text-sm font-semibold p-4">{{ formatDate(date) }}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="px-10 md:px-6 shadow-2xl">
-                        <div class="p-5 shadow-sm " v-for="(item, index) in filteredData" :key="index">
+                    <div class="px-10 md:px-3" style="box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.25);">
+                        <div class="p-3 shadow-sm " v-for="(item, index) in filteredData" :key="index">
                             <h3 class="text-[#00012D] font-bold">{{ item.title }}</h3>
                             <p class="text-gray-400">{{ item.description }}</p>
                             <div class="flex items-center gap-2">
@@ -185,3 +187,13 @@ onMounted(() => {
     }
 });
 </script>
+
+
+
+<style>
+.BorderShadow{
+    
+
+}
+
+</style>
