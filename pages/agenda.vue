@@ -21,7 +21,7 @@
                     </ul>
                 </div>
                 <div class="px-8 w-fit lg:w-3/5">
-                    <div v-if="pending" class="text-center text-gray-500">Loading data...</div>
+                    <div v-if="isFetching" class="text-center text-gray-500">Loading data...</div>
                     <div v-if="error" class="text-center text-red-500">Error: {{ error.message }}</div>
 
                     <div class="flex flex-col md:flex-row items-start md:items-center w-full space-x-4">
@@ -87,7 +87,7 @@ interface AgendaItem {
     startDate: string;
     [key: string]: any; 
 }
-const { data, error } = useFetch<AgendaItem[]>('https://swa-2024-dev.up.railway.app/api/agenda/web', {
+const { data,isFetching, error } = useFetch<AgendaItem[]>('https://swa-2024-dev.up.railway.app/api/agenda/web', {
     transform: (json: AgendaItem[]) => {
         return json.map(item => ({
             ...item,
@@ -97,11 +97,11 @@ const { data, error } = useFetch<AgendaItem[]>('https://swa-2024-dev.up.railway.
 });
 
 const uniqueArray = computed(() =>
-    Array.from(new Set(data.value?.map(obj => obj.type) || []))
+    Array.from(new Set(data.value?.map((obj: AgendaItem) => obj.type) || []))
 );
 
 const uniqueArrayDate = computed(() =>
-    Array.from(new Set(data.value?.map(obj => extractDate(obj.startDate)) || []))
+    Array.from(new Set(data.value?.map((obj:AgendaItem) => extractDate(obj.startDate)) || []))
 );
 
 const selectedType = ref<string>(useRoute().query.type as string || 'general');
@@ -110,7 +110,7 @@ const selectedDateType = ref<string>(useRoute().query.date as string || '2024-11
 const filteredData = computed(() => {
     return data.value
         ? data.value.filter(
-            item =>
+            (item: AgendaItem) =>
                 item.type === selectedType.value &&
                 (!selectedDateType.value || item.startDate === selectedDateType.value)
         )
@@ -136,11 +136,18 @@ function formatTime(timestamp: number | string): string {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
-function formatDate(dateString: string): string {
+// function formatDate(dateString: string): string {
+//     const date = new Date(dateString);
+//     const options = { month: 'short', day: 'numeric' };
+//     return date.toLocaleDateString('en-US', options);
+// }
+
+function formatDate(dateString: string):String {
     const date = new Date(dateString);
-    const options = { month: 'short', day: 'numeric' };
+    const options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
 }
+
 
 function extractDate(timestamp: number | string): string {
     return new Date(timestamp).toISOString().split('T')[0];
